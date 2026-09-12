@@ -1,0 +1,26 @@
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        l,n=0,len(s)
+        count=defaultdict(int)
+        for i in t:
+            count[i]+=1
+        have,need=0,len(count)
+        window=defaultdict(int)
+        res,resLen=[-1,-1], n+1
+        for r in range(n):
+            c=s[r]
+            window[c]+=1
+            if window[c]==count[c]:
+                have+=1
+            while have==need and l<=r:
+                if r-l+1<resLen:
+                    res=[l,r]
+                    resLen=r-l+1
+                window[s[l]]-=1
+                if window[s[l]]<count[s[l]]:
+                    have-=1
+                    l+=1
+                    break
+                l+=1
+        l,r=res
+        return s[l:r+1] if resLen!=n+1 else ''
